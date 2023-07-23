@@ -217,6 +217,9 @@ class SaveFileDialogParams {
   /// Access files in local device only (Android)?
   final bool localOnly;
 
+  /// Take take persistable uri permission (Android only)
+  final bool takePersistableUriPermission;
+
   /// Create parameters for the [saveFile] method.
   const SaveFileDialogParams({
     this.sourceFilePath,
@@ -224,12 +227,10 @@ class SaveFileDialogParams {
     this.fileName,
     this.mimeTypesFilter,
     this.localOnly = false,
-  })  : assert(sourceFilePath == null || data == null,
-            'sourceFilePath or data should be null'),
-        assert(sourceFilePath != null || data != null,
-            'Missing sourceFilePath or data'),
-        assert(data == null || (fileName != null && fileName != ''),
-            'Missing fileName');
+    this.takePersistableUriPermission = false,
+  })  : assert(sourceFilePath == null || data == null, 'sourceFilePath or data should be null'),
+        assert(sourceFilePath != null || data != null, 'Missing sourceFilePath or data'),
+        assert(data == null || (fileName != null && fileName != ''), 'Missing fileName');
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -238,6 +239,7 @@ class SaveFileDialogParams {
       'fileName': fileName,
       'mimeTypesFilter': mimeTypesFilter,
       'localOnly': localOnly,
+      'takePersistableUriPermission': takePersistableUriPermission,
     };
   }
 }
