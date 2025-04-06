@@ -105,7 +105,7 @@ class FileDialog(
         this.fileExtensionsFilter = fileExtensionsFilter
         this.copyPickedFileToCacheDir = copyFileToCacheDir
 
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             if (localOnly) {
                 putExtra(Intent.EXTRA_LOCAL_ONLY, true)
