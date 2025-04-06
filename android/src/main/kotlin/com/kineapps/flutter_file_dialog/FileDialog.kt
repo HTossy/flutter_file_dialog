@@ -244,7 +244,7 @@ class FileDialog(
 
                     if (this.takePersistableUriPermission) {
                         val takeFlags = (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                        activity.contentResolver.takePersistableUriPermission(destinationFileUri, takeFlags)
+                        activity?.contentResolver?.takePersistableUriPermission(destinationFileUri, takeFlags)
                     }
 
                 } else {
