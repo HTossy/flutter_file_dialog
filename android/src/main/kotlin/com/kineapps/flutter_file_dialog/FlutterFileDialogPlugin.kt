@@ -153,7 +153,8 @@ class FlutterFileDialogPlugin : FlutterPlugin, ActivityAware, MethodCallHandler 
                     data = call.argument("data"),
                     fileName = call.argument("fileName"),
                     mimeTypesFilter = parseMethodCallArrayArgument(call, "mimeTypesFilter"),
-                    localOnly = call.argument("localOnly") as Boolean? == true
+                    localOnly = call.argument("localOnly") as Boolean? == true,
+                    takePersistableUriPermission = call.argument("takePersistableUriPermission") as Boolean? == true,
             )
             else -> result.notImplemented()
         }

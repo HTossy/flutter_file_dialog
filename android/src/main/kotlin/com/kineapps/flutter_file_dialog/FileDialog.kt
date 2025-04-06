@@ -40,6 +40,7 @@ class FileDialog(
     // file to be saved
     private var sourceFile: File? = null
     private var isSourceFileTemp: Boolean = false
+    private var takePersistableUriPermission: Boolean = false
 
     fun setActivity(activity: Activity?) {
         this.activity = activity
@@ -122,16 +123,20 @@ class FileDialog(
                  data: ByteArray?,
                  fileName: String?,
                  mimeTypesFilter: Array<String>?,
-                 localOnly: Boolean
+                 localOnly: Boolean,
+                 takePersistableUriPermission: Boolean,
     ) {
         Log.d(LOG_TAG, "saveFile - IN, sourceFilePath=$sourceFilePath, " +
                 "data=${data?.size} bytes, fileName=$fileName, " +
-                "mimeTypesFilter=$mimeTypesFilter, localOnly=$localOnly")
+                "mimeTypesFilter=$mimeTypesFilter, localOnly=$localOnly" +
+                "takePersistableUriPermission=$takePersistableUriPermission")
 
         if (!setPendingResult(result)) {
             finishWithAlreadyActiveError(result)
             return
         }
+
+        this.takePersistableUriPermission = takePersistableUriPermission
 
         if (sourceFilePath != null) {
             isSourceFileTemp = false
@@ -236,6 +241,12 @@ class FileDialog(
                 if (resultCode == Activity.RESULT_OK && data?.data != null) {
                     val destinationFileUri = data.data
                     saveFileOnBackground(this.sourceFile!!, destinationFileUri!!)
+
+                    if (this.takePersistableUriPermission) {
+                        val takeFlags = (Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                        activity.contentResolver.takePersistableUriPermission(destinationFileUri, takeFlags)
+                    }
+
                 } else {
                     Log.d(LOG_TAG, "Cancelled")
                     if (isSourceFileTemp) {
@@ -374,8 +385,8 @@ class FileDialog(
                 inputStream.copyTo(outputStream)
             }
         }
-        Log.d(LOG_TAG, "Saved file to '${destinationFileUri.path}'")
-        return destinationFileUri.path!!
+        Log.d(LOG_TAG, "Saved file to '${destinationFileUri.toString()}'")
+        return destinationFileUri.toString()
     }
 
     private fun setPendingResult(
